@@ -1,12 +1,12 @@
 import client from "../database";
 
 type User = {
-  id?: string;
-  username?: string;
-  name?: string;
-  phone?: string;
+  id: string;
+  username: string;
+  name: string;
+  phone: string;
   email: string;
-  bio?: string;
+  bio: string;
   password: string;
 };
 
@@ -27,20 +27,20 @@ class Users {
     }
   }
 
-  async show(username: string): Promise<User> {
+  async show(id: string): Promise<User> {
     const sql =
-      "SELECT id , username , name , phone , email , bio WHERE username=($1)";
+      "SELECT id , username , name , phone , email , bio FROM users WHERE id=($1)";
 
     try {
       const conn = await client.connect();
-      const res = await conn.query(sql, [username]);
+      const res = await conn.query(sql, [id]);
       const user: User = res.rows[0];
 
       conn.release();
 
       return user;
     } catch (err) {
-      throw new Error(`db error couldn't show user ${username} ==> ${err}`);
+      throw new Error(`db error couldn't show user ${id} ==> ${err}`);
     }
   }
 
