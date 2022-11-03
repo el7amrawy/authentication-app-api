@@ -3,7 +3,7 @@ import { User, Users } from "../users";
 const user = {
   id: "",
   email: "ali@mail.com",
-  password: "fmfsf.sfsfd",
+  password: "fmfsfsfsfd",
 };
 
 const u = new Users();
@@ -17,14 +17,15 @@ describe("users model tests", () => {
   });
 
   it("expect 'show' to return a user", async () => {
-    const oldUser: User = await u.show(user.id);
+    const oldUser: User = await u.show(user.id || "1");
 
     expect(oldUser.id).toBe(user.id);
   });
 
   it("expect 'index' to return atleast one user", async () => {
     const users: User[] = await u.index();
+    // console.log(users);
 
-    expect(users.length).toBeGreaterThan(0);
+    expect(users[0]).toBeDefined;
   });
 });

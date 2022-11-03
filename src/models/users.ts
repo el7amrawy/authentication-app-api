@@ -1,4 +1,5 @@
 import client from "../database";
+import bcrypt from "bcrypt";
 
 type User = {
   id: string;
@@ -45,12 +46,19 @@ class Users {
   }
 
   async create(email: string, password: string): Promise<User> {
+    const { PEPPER, ROUNDS } = process.env;
+
+    const hashedPass = bcrypt.hashSync(
+      password + PEPPER,
+      parseInt(ROUNDS as unknown as string)
+    );
+
     const sql =
       "INSERT INTO users (email,password) VALUES ($1,$2) RETURNING id , username , name , phone , email , bio";
 
     try {
       const conn = await client.connect();
-      const res = await conn.query(sql, [email, password]);
+      const res = await conn.query(sql, [email, hashedPass]);
       const user: User = res.rows[0];
 
       conn.release();
