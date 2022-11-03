@@ -12,7 +12,8 @@
     "build": "tsc",
     "db": "docker-compose up -d",
     "psql": "docker exec -it db_co psql dev_db -U dev_user",
-    "migrations": "db-migrate up"
+    "migrations": "db-migrate up",
+    "test": "db-migrate db:drop test_db && npm run build && db-migrate db:create test_db && set ENV=test && db-migrate --env test up && jasmine  && set ENV=dev "
   },
   "keywords": [],
   "author": "",

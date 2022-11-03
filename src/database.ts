@@ -9,13 +9,17 @@ const {
   POSTGRES_PASSWORD,
   POSTGRES_PORT,
   POSTGRES_DB,
-  ENV,
+  POSTGRES_TEST_DB,
 } = process.env;
+
+let { ENV } = process.env;
+ENV = ENV?.replace(/\s/g, "");
 
 const client = new pg.Pool({
   host: POSTGRES_HOST,
   port: parseInt(POSTGRES_PORT as unknown as string),
-  database: POSTGRES_DB,
+  database:
+    ENV === "dev" ? POSTGRES_DB : ENV === "test" ? POSTGRES_TEST_DB : "",
   user: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
 });

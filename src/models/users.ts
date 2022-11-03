@@ -1,19 +1,18 @@
 import client from "../database";
 
 type User = {
-  id: string;
-  username: string;
-  name: string;
-  phone: string;
+  id?: string;
+  username?: string;
+  name?: string;
+  phone?: string;
   email: string;
-  bio: string;
-  password?: string;
+  bio?: string;
+  password: string;
 };
 
 class Users {
   async index(): Promise<User[]> {
-    const sql =
-      "SELECT (id , username , name , phone , email , bio) FROM users";
+    const sql = "SELECT id , username , name , phone , email , bio FROM users";
 
     try {
       const conn = await client.connect();
@@ -30,7 +29,7 @@ class Users {
 
   async show(username: string): Promise<User> {
     const sql =
-      "SELECT (id , username , name , phone , email , bio) WHERE username=($1)";
+      "SELECT id , username , name , phone , email , bio WHERE username=($1)";
 
     try {
       const conn = await client.connect();
@@ -47,7 +46,7 @@ class Users {
 
   async create(email: string, password: string): Promise<User> {
     const sql =
-      "INSERT INTO users (email,password) VALUES ($1,$2) RETURNING (id , username , name , phone , email , bio)";
+      "INSERT INTO users (email,password) VALUES ($1,$2) RETURNING id , username , name , phone , email , bio";
 
     try {
       const conn = await client.connect();
