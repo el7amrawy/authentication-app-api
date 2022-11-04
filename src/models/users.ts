@@ -3,12 +3,12 @@ import bcrypt from "bcrypt";
 
 type User = {
   id: string;
-  username: string;
-  name: string;
-  phone: string;
+  username?: string;
+  name?: string;
+  phone?: string;
   email: string;
-  bio: string;
-  password: string;
+  bio?: string;
+  password?: string;
 };
 
 class Users {
@@ -66,6 +66,46 @@ class Users {
       return user;
     } catch (err) {
       throw new Error(`db error couldn't create user ==> ${err}`);
+    }
+  }
+
+  async update(user: User): Promise<User> {
+    const sql =
+      "UPDATE users SET username=($1) , name=($2) , phone=($3) , email=($4) , bio=($5) WHERE id=($6) RETURNING id , username , name , phone , email , bio";
+
+    try {
+      const conn = await client.connect();
+      const res = await conn.query(sql, [
+        user.username,
+        user.name,
+        user.phone,
+        user.email,
+        user.bio,
+        user.id,
+      ]);
+      const updatedUser = res.rows[0];
+
+      conn.release();
+      return updatedUser;
+    } catch (err) {
+      throw new Error(`db error couldn't update user ${user.id} ==> ${err}`);
+    }
+  }
+
+  async delete(id: string): Promise<User> {
+    const sql =
+      "DELETE from users WHERE id=$1 RETURNING id , username , name , phone , email , bio";
+
+    try {
+      const conn = await client.connect();
+      const res = await conn.query(sql, [id]);
+      const user = res.rows[0];
+
+      conn.release();
+
+      return user;
+    } catch (err) {
+      throw new Error(`db error couldn't delete user ${id} ==> ${err}`);
     }
   }
 }
