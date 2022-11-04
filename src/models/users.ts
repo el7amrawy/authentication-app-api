@@ -11,6 +11,8 @@ type User = {
   password?: string;
 };
 
+const { PEPPER, ROUNDS } = process.env;
+
 class Users {
   async index(): Promise<User[]> {
     const sql = "SELECT id , username , name , phone , email , bio FROM users";
@@ -46,8 +48,6 @@ class Users {
   }
 
   async create(email: string, password: string): Promise<User> {
-    const { PEPPER, ROUNDS } = process.env;
-
     const hashedPass = bcrypt.hashSync(
       password + PEPPER,
       parseInt(ROUNDS as unknown as string)
@@ -106,6 +106,27 @@ class Users {
       return user;
     } catch (err) {
       throw new Error(`db error couldn't delete user ${id} ==> ${err}`);
+    }
+  }
+
+  async authenticate(id: string, password: string): Promise<User | null> {
+    const sql = "SELECT * FROM users WHERE id=$1";
+
+    try {
+      const conn = await client.connect();
+      const res = await conn.query(sql, [id]);
+      const user: User = res.rows[0];
+      if (
+        bcrypt.compareSync(
+          password + PEPPER,
+          user.password as unknown as string
+        )
+      ) {
+        return user;
+      }
+      return null;
+    } catch (err) {
+      throw new Error(`db error couldn't authenticate user ${id} ==> ${err}`);
     }
   }
 }

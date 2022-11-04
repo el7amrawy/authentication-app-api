@@ -29,7 +29,7 @@ describe("users model tests", () => {
     expect(deletedUser.id).toBe(user.id);
   });
 
-  it("expect update to return different values", async () => {
+  it("expect 'update' to return different values", async () => {
     const user = await u.create("email@email", "assasa");
 
     const updateUser = await u.update({
@@ -37,5 +37,12 @@ describe("users model tests", () => {
       email: "kljkkjkj@email",
     });
     expect(updateUser.email).not.toBe(user.email);
+  });
+
+  it("expect 'authenticate' to return a user", async () => {
+    const pass = "adsdasdsda";
+    const user = await u.create("auth@mail", pass);
+    const authUser = await u.authenticate(user.id, pass);
+    expect(authUser?.email).toBe(user.email);
   });
 });
