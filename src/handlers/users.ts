@@ -1,6 +1,10 @@
 import { Users } from "../models/users";
 import { Router, Request, Response } from "express";
-import verifyAuthToken from "../services/authorization";
+import {
+  verifyAuthToken,
+  createToken,
+  checkUser,
+} from "../services/authorization";
 
 const u = new Users();
 
@@ -35,7 +39,7 @@ const create = async (req: Request, res: Response) => {
 
   try {
     const user = await u.create(email, password);
-    res.json(user);
+    res.json({ token: createToken(user), user: user });
   } catch (err) {
     res.status(400).json(`can't create user ==> ${err}`);
   }
@@ -69,7 +73,7 @@ const authenticate = async (req: Request, res: Response) => {
   try {
     const user = await u.authenticate(id, password);
     if (user) {
-      res.json(user);
+      res.json({ token: createToken(user), user: user });
     } else {
       throw new Error("wrong password");
     }
@@ -79,10 +83,10 @@ const authenticate = async (req: Request, res: Response) => {
 };
 
 usersRoutes.get("/users", verifyAuthToken, index);
-usersRoutes.get("/users/:id", verifyAuthToken, show);
+usersRoutes.get("/users/:id", verifyAuthToken, checkUser, show);
 usersRoutes.post("/users", create);
 usersRoutes.post("/users/auth", authenticate);
-usersRoutes.post("/users/:id", verifyAuthToken, update);
-usersRoutes.delete("/users/:id", verifyAuthToken, rm);
+usersRoutes.post("/users/:id", verifyAuthToken, checkUser, update);
+usersRoutes.delete("/users/:id", verifyAuthToken, checkUser, rm);
 
 export default usersRoutes;
