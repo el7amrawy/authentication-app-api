@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import Jwt from "jsonwebtoken";
 import { User } from "../models/users";
+import DashboardQueries from "./dashboard";
 
 const token_secret = process.env.TOKEN_SECRET as unknown as string;
+
+const d = new DashboardQueries();
 
 const verifyAuthToken = (req: Request, res: Response, next: Function) => {
   try {
@@ -35,4 +38,19 @@ const checkUser = (req: Request, res: Response, next: Function) => {
     res.status(403).json(`${err}`);
   }
 };
-export { verifyAuthToken, createToken, checkUser };
+
+const checkEmail = async (req: Request, res: Response, next: Function) => {
+  try {
+    const { email } = req.body;
+    const user = await d.getUserId(email);
+    if (user?.id) {
+      throw new Error("email already used");
+    } else {
+      next();
+    }
+  } catch (err) {
+    res.status(406).json(`${err}`);
+  }
+};
+
+export { verifyAuthToken, createToken, checkUser, checkEmail };

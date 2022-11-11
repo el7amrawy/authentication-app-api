@@ -4,6 +4,7 @@ import {
   verifyAuthToken,
   createToken,
   checkUser,
+  checkEmail,
 } from "../services/authorization";
 
 const u = new Users();
@@ -84,7 +85,7 @@ const authenticate = async (req: Request, res: Response) => {
 
 usersRoutes.get("/users", verifyAuthToken, index);
 usersRoutes.get("/users/:id", verifyAuthToken, checkUser, show);
-usersRoutes.post("/users", create);
+usersRoutes.post("/users", checkEmail, create);
 usersRoutes.post("/users/auth", authenticate);
 usersRoutes.post("/users/:id", verifyAuthToken, checkUser, update);
 usersRoutes.delete("/users/:id", verifyAuthToken, checkUser, rm);

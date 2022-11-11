@@ -1,12 +1,14 @@
 import { Router, Request, Response } from "express";
 import usersRoutes from "../handlers/users";
+import dashboardRoutes from "../handlers/dashboard";
 
 const routes: Router = Router();
 
+routes.use(dashboardRoutes);
 routes.use(usersRoutes);
 
-routes.get("/", (_req: Request, res: Response) => {
-  res.send("s");
+routes.all("*", (_req: Request, res: Response) => {
+  res.status(404).send("404 not found");
 });
 
 export default routes;
