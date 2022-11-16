@@ -9,6 +9,7 @@ type User = {
   email: string;
   bio?: string;
   password?: string;
+  img?: string;
 };
 
 const { PEPPER, ROUNDS } = process.env;
@@ -71,7 +72,7 @@ class Users {
 
   async update(user: User): Promise<User> {
     const sql =
-      "UPDATE users SET username=($1) , name=($2) , phone=($3) , email=($4) , bio=($5) WHERE id=($6) RETURNING id , username , name , phone , email , bio";
+      "UPDATE users SET username=($1) , name=($2) , phone=($3) , email=($4) , bio=($5), img=$6 WHERE id=($7) RETURNING id , username , name , phone , email , bio";
 
     try {
       const conn = await client.connect();
@@ -81,6 +82,7 @@ class Users {
         user.phone,
         user.email,
         user.bio,
+        user.img,
         user.id,
       ]);
       const updatedUser = res.rows[0];

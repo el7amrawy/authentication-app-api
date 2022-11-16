@@ -1,18 +1,18 @@
 import supertest from "supertest";
 import { User, Users } from "../../models/users";
 import app from "../../server";
-import { test_pass, test_mail } from "./helpers/createUsers";
 
 const req = supertest(app);
 const u = new Users();
 
 describe("userRoutes tests", () => {
   it("expect server to return a new user <'/users' post>", async () => {
+    const email = "bsahsadhgsdhgans@mail";
     const res = await req
       .post("/users")
-      .send({ email: test_mail, password: test_pass });
+      .send({ email, password: "ambhgasasgdhahsahs" });
     const user = res.body.user;
-    expect(user.email).toBe(test_mail);
+    expect(user.email).toBe(email);
   });
 
   it("expect server to return an authToken <'/users/auth' post>", async () => {
