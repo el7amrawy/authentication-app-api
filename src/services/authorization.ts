@@ -41,12 +41,14 @@ const checkUser = (req: Request, res: Response, next: Function) => {
 
 const checkEmail = async (req: Request, res: Response, next: Function) => {
   try {
-    const { email } = req.body;
+    const email = req.body.email || req.body.user.email;
+
     const user = await d.getUserId(email);
-    if (user?.id) {
-      throw new Error("email already used");
-    } else {
+
+    if (!user?.id || user?.id == req.body.user?.id) {
       next();
+    } else {
+      throw new Error("email already used");
     }
   } catch (err) {
     res.status(406).json(`${err}`);

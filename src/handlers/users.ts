@@ -87,7 +87,7 @@ usersRoutes.get("/users", verifyAuthToken, index);
 usersRoutes.get("/users/:id", verifyAuthToken, checkUser, show);
 usersRoutes.post("/users", checkEmail, create);
 usersRoutes.post("/users/auth", authenticate);
-usersRoutes.post("/users/:id", verifyAuthToken, checkUser, update);
+usersRoutes.post("/users/:id", verifyAuthToken, checkUser, checkEmail, update);
 usersRoutes.delete("/users/:id", verifyAuthToken, checkUser, rm);
 
 export default usersRoutes;

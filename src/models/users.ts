@@ -33,7 +33,7 @@ class Users {
 
   async show(id: string): Promise<User> {
     const sql =
-      "SELECT id , username , name , phone , email , bio FROM users WHERE id=($1)";
+      "SELECT id , username , name , phone , email , bio, img FROM users WHERE id=($1)";
 
     try {
       const conn = await client.connect();
@@ -55,7 +55,7 @@ class Users {
     );
 
     const sql =
-      "INSERT INTO users (email,password) VALUES ($1,$2) RETURNING id , username , name , phone , email , bio";
+      "INSERT INTO users (email,password) VALUES ($1,$2) RETURNING id , username , name , phone , email , bio, img";
 
     try {
       const conn = await client.connect();
@@ -72,7 +72,7 @@ class Users {
 
   async update(user: User): Promise<User> {
     const sql =
-      "UPDATE users SET username=($1) , name=($2) , phone=($3) , email=($4) , bio=($5), img=$6 WHERE id=($7) RETURNING id , username , name , phone , email , bio";
+      "UPDATE users SET username=($1) , name=($2) , phone=($3) , email=($4) , bio=($5), img=$6 WHERE id=($7) RETURNING id , username , name , phone , email , bio, img";
 
     try {
       const conn = await client.connect();
@@ -96,7 +96,7 @@ class Users {
 
   async delete(id: string): Promise<User> {
     const sql =
-      "DELETE from users WHERE id=$1 RETURNING id , username , name , phone , email , bio";
+      "DELETE from users WHERE id=$1 RETURNING id , username , name , phone , email , bio, img";
 
     try {
       const conn = await client.connect();
@@ -124,7 +124,7 @@ class Users {
           user.password as unknown as string
         )
       ) {
-        return user;
+        return { ...user, password: undefined };
       }
       return null;
     } catch (err) {
