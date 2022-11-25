@@ -20,8 +20,7 @@ const storage = multer.diskStorage({
     callback(null, destPath);
   },
   filename: function (_req, file, callback) {
-    imageName =
-      file.fieldname + "-" + Date.now() + `.${file.mimetype.split("/")[1]}`;
+    imageName = "avatar" + "-" + Date.now() + `.${file.mimetype.split("/")[1]}`;
     callback(null, imageName);
   },
 });
