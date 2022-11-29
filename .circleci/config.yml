@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
+  wait-for: cobli/wait-for@1.0.0
 ##
 jobs:
   build:
@@ -22,11 +23,12 @@ jobs:
   test:
     docker:
       - image: "cimg/base:stable"
-      - image: "cimg/postgres:15.0-postgis"
+      - image: "cimg/postgres:15.0"
     steps:
-      - checkout
       - node/install:
           node-version: "16.17.1"
+      - checkout
+      - wait-for/postgres
       - run:
           name: Install packages
           command: |
