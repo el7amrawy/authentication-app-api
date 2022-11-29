@@ -50,12 +50,12 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
       - run:
+          name: start database
+          command: npm run db
+      - run:
           name: wait for db
           command: |
             dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: start database
-          command: npm run db
       - run:
           name: run migrations
           command: npm run migrations
