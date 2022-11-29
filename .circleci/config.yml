@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
-  wait-for: cobli/wait-for@1.0.0
 ##
 jobs:
   build:
@@ -28,7 +27,6 @@ jobs:
       - node/install:
           node-version: "16.17.1"
       - checkout
-      - wait-for/postgres
       - run:
           name: Install packages
           command: |
@@ -37,6 +35,16 @@ jobs:
           name: build packages
           command: |
             npm run build
+      - run:
+          name: install dockerize
+          command: |
+            wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: wait for db
+          command: |
+            dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: start database
           command: npm run db
