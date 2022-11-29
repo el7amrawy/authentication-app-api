@@ -28,6 +28,7 @@ jobs:
       - node/install:
           node-version: "16.17.1"
       - checkout
+      - wait-for/postgres
       - run:
           name: Install packages
           command: |
@@ -36,7 +37,6 @@ jobs:
           name: build packages
           command: |
             npm run build
-      - wait-for/postgres
       - run:
           name: start database
           command: npm run db
