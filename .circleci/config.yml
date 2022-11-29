@@ -26,7 +26,7 @@ jobs:
     steps:
       - node/install:
           node-version: "16.17.1"
-      - postgres/install:
+      # - postgres/install:
       - checkout
       - run:
           name: Install packages
