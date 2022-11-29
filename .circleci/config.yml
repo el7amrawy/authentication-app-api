@@ -22,7 +22,9 @@ jobs:
   test:
     docker:
       - image: "cimg/base:stable"
-      # - image: "cimg/postgres:15.0"
+      - image: "cimg/postgres:15.0"
+        environment:
+          POSTGRES_USER: postgres
     steps:
       - node/install:
           node-version: "16.17.1"
@@ -42,23 +44,11 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.3.0
       - run:
-          name: Install Docker Compose
-          environment:
-            COMPOSE_VERSION: "1.29.2"
-          command: |
-            curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
-      - run:
-          name: create .env
-          command: echo POSTGRES_USER=$POSTGRES_USER POSTGRES_PASSWORD=$POSTGRES_PASSWORD POSTGRES_DB=$POSTGRES_DB > .env
+          name: wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: start database
           command: npm run db
-      - run:
-          name: wait for db
-          command: |
-            dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: run migrations
           command: npm run migrations
