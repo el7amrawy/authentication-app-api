@@ -22,11 +22,11 @@ jobs:
   test:
     docker:
       - image: "cimg/base:stable"
-      - image: "cimg/postgres:15.0.0"
+      - image: "cimg/postgres:15.0-postgis"
     steps:
+      - checkout
       - node/install:
           node-version: "16.17.1"
-      - checkout
       - run:
           name: Install packages
           command: |
