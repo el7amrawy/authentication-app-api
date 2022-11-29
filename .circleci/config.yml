@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
-  postgres: onehq/postgres@1.1.0
 ##
 jobs:
   build:
@@ -23,10 +22,10 @@ jobs:
   test:
     docker:
       - image: "cimg/base:stable"
+      - image: cimg/postgres:15.0.0
     steps:
       - node/install:
           node-version: "16.17.1"
-      - postgres/install:
       - checkout
       - run:
           name: Install packages
