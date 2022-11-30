@@ -23,8 +23,6 @@ jobs:
     docker:
       - image: "cimg/base:stable"
       - image: "cimg/postgres:15.0"
-        environment:
-          POSTGRES_USER: postgres
     steps:
       - node/install:
           node-version: "16.17.1"
