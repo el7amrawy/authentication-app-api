@@ -14,5 +14,11 @@
     "database": { "ENV": "POSTGRES_TEST_DB" },
     "user": { "ENV": "POSTGRES_USER" },
     "password": { "ENV": "POSTGRES_PASSWORD" }
+  },
+  "circleci": {
+    "driver": "pg",
+    "database": "circleci_test",
+    "user": "postgres",
+    "password": "postgres"
   }
 }
