@@ -50,7 +50,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: run migrations
-          command: ENV=circleci && npm run migrations
+          command: set ENV=circleci && npm run migrations
       - run:
           name: run tests
           command: npm run test
