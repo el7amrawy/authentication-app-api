@@ -50,7 +50,7 @@ jobs:
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
       - run:
           name: pull postgres
-          command: docker pull postgres
+          command: systemctl start docker && docker pull postgres
       - run:
           name: run db
           command: npm run db
