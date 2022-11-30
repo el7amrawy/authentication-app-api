@@ -1,8 +1,6 @@
 {
   "dev": {
     "driver": "pg",
-    "port": { "ENV": "POSTGRES_PORT" },
-    "host": { "ENV": "POSTGRES_HOST" },
     "database": { "ENV": "POSTGRES_DB" },
     "user": { "ENV": "POSTGRES_USER" },
     "password": { "ENV": "POSTGRES_PASSWORD" }
@@ -10,15 +8,8 @@
   "test": {
     "driver": "pg",
     "port": { "ENV": "POSTGRES_PORT" },
-    "host": { "ENV": "POSTGRES_HOST" },
     "database": { "ENV": "POSTGRES_TEST_DB" },
     "user": { "ENV": "POSTGRES_USER" },
     "password": { "ENV": "POSTGRES_PASSWORD" }
-  },
-  "circleci": {
-    "driver": "pg",
-    "database": "circleci_test",
-    "user": "postgres",
-    "password": "postgres"
   }
 }

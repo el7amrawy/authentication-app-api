@@ -24,9 +24,9 @@ jobs:
       - image: "cimg/base:stable"
       - image: "cimg/postgres:15.0"
         environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: circleci_test
+          POSTGRES_USER: $POSTGRES_USER
+          POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+          POSTGRES_DB: $POSTGRES_DB
     steps:
       - node/install:
           node-version: "16.17.1"
@@ -50,7 +50,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: run migrations
-          command: "npx db-migrate up --env circleci"
+          command: "npx db-migrate up --env test"
       - run:
           name: run tests
           command: npm run test
