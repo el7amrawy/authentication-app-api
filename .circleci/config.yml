@@ -22,7 +22,7 @@ jobs:
   test:
     docker:
       - image: "cimg/base:stable"
-      - image: "cimg/postgres:15-alpine-ram"
+      - image: "cimg/postgres:15.0"
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
