@@ -55,9 +55,9 @@ jobs:
       - run:
           name: run db
           command: npm run db
-      - run:
-          name: wait for db
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      # - run:
+      #     name: wait for db
+      #     command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: run migrations
           command: npm run migrations
