@@ -47,9 +47,6 @@ jobs:
           name: wait for db
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
-          name: start database
-          command: npm run db
-      - run:
           name: run migrations
           command: npm run migrations
       - run:
