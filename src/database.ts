@@ -14,7 +14,7 @@ const {
   CI_POSTGRES_PASSWORD,
   CI_POSTGRES_DB,
   // prod
-  DATABASE_URL,
+  DB_URL,
 } = process.env;
 
 let { ENV } = process.env;
@@ -45,7 +45,7 @@ const client = new pg.Pool(
     ? test
     : ENV === "circleci"
     ? circleci
-    : { connectionString: DATABASE_URL }
+    : { connectionString: DB_URL }
 );
 
 export default client;

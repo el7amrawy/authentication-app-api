@@ -24,6 +24,6 @@
   },
   "prod": {
     "driver": "pg",
-    "url": { "ENV": "DATABASE_URL" }
+    "url": { "ENV": "DB_URL" }
   }
 }
