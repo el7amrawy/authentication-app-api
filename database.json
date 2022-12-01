@@ -17,6 +17,7 @@
     "password": { "ENV": "POSTGRES_PASSWORD" }
   },
   "circleci": {
+    "driver": "pg",
     "database": { "ENV": "CI_POSTGRES_DB" },
     "user": { "ENV": "CI_POSTGRES_USER" },
     "password": { "ENV": "CI_POSTGRES_PASSWORD" }
