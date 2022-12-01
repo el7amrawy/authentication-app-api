@@ -1,0 +1,87 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+##
+jobs:
+  # build:
+  #   docker:
+  #     - image: "cimg/base:stable"
+  #   steps:
+  #     - node/install:
+  #         node-version: "16.17.1"
+  #     - checkout
+  #     - run:
+  #         name: Install packages
+  #         command: |
+  #           npm install
+  #     - run:
+  #         name: build packages
+  #         command: |
+  #           npm run build
+  #
+  test:
+    docker:
+      - image: "cimg/base:stable"
+      - image: "cimg/postgres:15.0"
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_PASSWORD: circleci
+          POSTGRES_DB: circleci_db
+    steps:
+      - node/install:
+          node-version: "16.17.1"
+      - checkout
+      - run:
+          name: Install packages
+          command: |
+            npm install
+      - run:
+          name: build packages
+          command: |
+            npm run build
+      - run:
+          name: install dockerize
+          command: |
+            wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: run migrations
+          command: "npx db-migrate up"
+      - run:
+          name: run tests
+          command: npx jasmine
+  #
+  deploy:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install:
+          node-version: "16.17.1"
+      - checkout
+      - run:
+          name: Deploy to heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+##
+workflows:
+  build-test-deploy:
+    jobs:
+      # - build
+      - test
+        # requires:
+        #   - build
+      - hold:
+          filters:
+            branches:
+              only:
+                - master
+          type: approval
+          requires:
+            - test
+      - deploy:
+          requires:
+            - hold
