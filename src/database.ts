@@ -14,36 +14,28 @@ const {
   CI_POSTGRES_PASSWORD,
   CI_POSTGRES_DB,
   // prod
-  PROD_POSTGRES_DB,
-  PROD_POSTGRES_USER,
-  PROD_POSTGRES_PASSWORD,
+  DATABASE_URL,
 } = process.env;
 
 let { ENV } = process.env;
 ENV = ENV?.replace(/\s/g, "");
 
-const dev = {
+const dev: pg.ConnectionConfig = {
   database: POSTGRES_DB,
   user: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
 };
 
-const test = {
+const test: pg.ConnectionConfig = {
   database: POSTGRES_TEST_DB,
   user: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
 };
 
-const circleci = {
+const circleci: pg.ConnectionConfig = {
   database: CI_POSTGRES_DB,
   user: CI_POSTGRES_USER,
   password: CI_POSTGRES_PASSWORD,
-};
-
-const prod = {
-  database: PROD_POSTGRES_DB,
-  user: PROD_POSTGRES_USER,
-  password: PROD_POSTGRES_PASSWORD,
 };
 
 const client = new pg.Pool(
@@ -53,7 +45,7 @@ const client = new pg.Pool(
     ? test
     : ENV === "circleci"
     ? circleci
-    : prod
+    : { connectionString: DATABASE_URL }
 );
 
 export default client;
