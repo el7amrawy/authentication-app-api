@@ -13,6 +13,10 @@ const {
   CI_POSTGRES_USER,
   CI_POSTGRES_PASSWORD,
   CI_POSTGRES_DB,
+  // prod
+  PROD_POSTGRES_DB,
+  PROD_POSTGRES_USER,
+  PROD_POSTGRES_PASSWORD,
 } = process.env;
 
 let { ENV } = process.env;
@@ -36,6 +40,12 @@ const circleci = {
   password: CI_POSTGRES_PASSWORD,
 };
 
+const prod = {
+  database: PROD_POSTGRES_DB,
+  user: PROD_POSTGRES_USER,
+  password: PROD_POSTGRES_PASSWORD,
+};
+
 const client = new pg.Pool(
   ENV === "dev"
     ? dev
@@ -43,7 +53,7 @@ const client = new pg.Pool(
     ? test
     : ENV === "circleci"
     ? circleci
-    : {}
+    : prod
 );
 
 export default client;

@@ -3,22 +3,22 @@ orbs:
   node: circleci/node@5.0.2
 ###
 jobs:
-  # build:
-  #   docker:
-  #     - image: "cimg/base:stable"
-  #   steps:
-  #     - node/install:
-  #         node-version: "16.17.1"
-  #     - checkout
-  #     - run:
-  #         name: Install packages
-  #         command: |
-  #           npm install
-  #     - run:
-  #         name: build packages
-  #         command: |
-  #           npm run build
-  #
+  build:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install:
+          node-version: "16.17.1"
+      - checkout
+      - run:
+          name: Install packages
+          command: |
+            npm install
+      - run:
+          name: build packages
+          command: |
+            npm run build
+
   test:
     docker:
       - image: "cimg/base:stable"
@@ -63,6 +63,10 @@ jobs:
           node-version: "16.17.1"
       - checkout
       - run:
+          name: create .env
+          command: |
+            echo ENV=prod PEPPER=$PEPPER ROUNDS=$ROUNDS TOKEN_SECRET=$TOKEN_SECRET PROD_POSTGRES_DB=$PROD_POSTGRES_DB PROD_POSTGRES_USER=$PROD_POSTGRES_USER PROD_POSTGRES_PASSWORD=$PROD_POSTGRES_PASSWORD > .env
+      - run:
           name: Deploy to heroku
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
@@ -70,10 +74,10 @@ jobs:
 workflows:
   build-test-deploy:
     jobs:
-      # - build
-      - test
-        # requires:
-        #   - build
+      - build
+      - test:
+          requires:
+            - build
       - hold:
           filters:
             branches:

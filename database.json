@@ -21,5 +21,11 @@
     "database": { "ENV": "CI_POSTGRES_DB" },
     "user": { "ENV": "CI_POSTGRES_USER" },
     "password": { "ENV": "CI_POSTGRES_PASSWORD" }
+  },
+  "prod": {
+    "driver": "pg",
+    "database": { "ENV": "PROD_POSTGRES_DB" },
+    "user": { "ENV": "PROD_POSTGRES_USER" },
+    "password": { "ENV": "PROD_POSTGRES_PASSWORD" }
   }
 }
