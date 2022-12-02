@@ -16,7 +16,7 @@ routes.use(
 );
 
 routes.all("*", (_req: Request, res: Response) => {
-  res.status(404).send("404 not found");
+  res.status(404).send("<h1>404 not found</h1>");
 });
 
 export default routes;
